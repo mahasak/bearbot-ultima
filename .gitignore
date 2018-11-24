@@ -1,5 +1,7 @@
 # Firebase
 .firebaserc
+functions/config.js
+
 
 # Logs
 logs
