@@ -34,12 +34,10 @@ jobs:
       - store_test_results:
           path: junit.xml
       - run: 
-          working_directory: ./functions/
+          working_directory: ~/repo/functions/
           command: npm run build
-      - persist_to_workspace:
-          root: ./functions/
-          paths:
-            - .      
 
       # deploy
-      - run: cd functions && ./node_modules/.bin/firebase deploy --project $PROJECT_ID --token=$FIREBASE_TOKEN
+      - run: 
+          working_directory: ~/repo/
+          command: ./functions/node_modules/.bin/firebase deploy --project $PROJECT_ID --token=$FIREBASE_TOKEN
