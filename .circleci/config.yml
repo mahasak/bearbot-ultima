@@ -37,4 +37,4 @@ jobs:
       # deploy
       - run: 
           working_directory: ~/repo/
-          command: ./functions/node_modules/.bin/firebase deploy --project $PROJECT_ID --token=$FIREBASE_TOKEN
+          command: ./functions/node_modules/.bin/firebase deploy -f --project $PROJECT_ID --token=$FIREBASE_TOKEN
