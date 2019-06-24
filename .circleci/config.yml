@@ -33,7 +33,9 @@ jobs:
       - run: cd functions && npm test
       - store_test_results:
           path: junit.xml
-      - run: npm run build
+      - run: 
+          working_directory: ./functions/
+          command: npm run build
       - persist_to_workspace:
           root: ./functions/
           paths:
