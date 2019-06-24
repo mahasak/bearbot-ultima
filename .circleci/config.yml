@@ -33,6 +33,7 @@ jobs:
       - run: cd functions && npm test
       - store_test_results:
           path: junit.xml
+      - run: cd functions && npm run build
       
       # deploy
       - run: cd functions && ./node_modules/.bin/firebase deploy --project $PROJECT_ID --token=$FIREBASE_TOKEN
