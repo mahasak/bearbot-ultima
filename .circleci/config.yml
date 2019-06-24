@@ -35,7 +35,7 @@ jobs:
           path: junit.xml
       - run: npm run build
       - persist_to_workspace:
-          root: .
+          root: ./functions/
           paths:
             - .      
 
