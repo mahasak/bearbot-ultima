@@ -35,4 +35,4 @@ jobs:
           path: junit.xml
 
       # deploy
-      - run: cfirebase deploy --project $PROJECT_ID --token=$FIREBASE_TOKEN 
+      - run: ./functions/node_modules/.bin/firebase deploy --project $PROJECT_ID --token=$FIREBASE_TOKEN 
