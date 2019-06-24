@@ -1,12 +1,13 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 
+import {version} from './controllers/version';
+import {webhook} from './controllers/webhook';
 admin.initializeApp(functions.config().firebase)
 
-exports.version = functions.https.onRequest((request, response) => {
-    response.send("Bearbot API - V.1.0.0");
-});
+// Firestore settings.
+const db = admin.firestore();
+db.settings({ timestampsInSnapshots: true });
 
-exports.webhookMessenger = functions.https.onRequest((request, response) => {
-    response.send("WEBHOOK");
-})
+exports.version = functions.https.onRequest(version);
+exports.webhookMessenger = functions.https.onRequest(webhook);
