@@ -2,7 +2,7 @@
   "name": "functions",
   "scripts": {
     "lint": "tslint --project tsconfig.json",
-    "build": "webpack --mode=production",
+    "build": "npm run webpack -- --mode production",
     "build-dev": "webpack --mode=development",
     "serve": "npm run build && firebase serve --only functions",
     "shell": "npm run build && firebase functions:shell",
