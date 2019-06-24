@@ -10,12 +10,16 @@
   },
   "hosting": {
     "public": "public",
-    "rewrites": [{
-      "source": "/api/v1/helloWorld", "function": "helloWorld"
-    },
-    {
-      "source": "/api/v2/hello", "function": "helloWorld"
-    }],
+    "rewrites": [
+      {
+        "source": "/api/version",
+        "function": "version"
+      },
+      {
+        "source": "/webhook/messenger",
+        "function": "webhookMessenger"
+      }
+    ],
     "ignore": [
       "firebase.json",
       "**/.*",
