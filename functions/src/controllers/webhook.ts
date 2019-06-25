@@ -1,7 +1,16 @@
 import { Request, Response } from 'firebase-functions';
 import { VerifySubscriptionRule, DefaultRule } from "../rules";
-import { WebhookPipeline } from "../components/WebhookPipeline";
+import { IWebhookRule } from '../rules/IWebhookRule';
 
-const pipelines = new WebhookPipeline([VerifySubscriptionRule.getInstance(), DefaultRule.getInstance()]);
+const pipeline: IWebhookRule[] = [VerifySubscriptionRule.getInstance(), DefaultRule.getInstance()];
 
-export let webhook = (request: Request, response: Response) => pipelines.run(request, response)
+export let webhook = (request: Request, response: Response) => { 
+    let executed: boolean = false;
+
+    pipeline.forEach(rule => {
+        if(!executed && rule.pass(request, response)){
+            rule.execute(request, response);
+            executed = true;
+        }
+    });
+}

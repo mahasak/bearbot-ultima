@@ -5,7 +5,7 @@ import { IWebhookRule } from "./IWebhookRule";
 
 export class VerifySubscriptionRule implements IWebhookRule {
     public pass(req: functions.Request, res: functions.Response): boolean {
-        return (req.query['hub.mode'] === 'subscribe') ? true : false;
+        return (req.query['hub.mode'] === 'subscribe');
     }
 
     public execute(req: functions.Request, res: functions.Response): void {
