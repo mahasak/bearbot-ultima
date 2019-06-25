@@ -1,5 +1,7 @@
-import {Request, Response} from 'firebase-functions';
+import { Request, Response } from 'firebase-functions';
+import { VerifySubscriptionRule, DefaultRule } from "../rules";
+import { WebhookPipeline } from "../components/WebhookPipeline";
 
-export let webhook = (request: Request, response: Response) => {
-    response.send("Bearbot API - V.1.0.0");
-}
+const pipelines = new WebhookPipeline([VerifySubscriptionRule.getInstance(), DefaultRule.getInstance()]);
+
+export let webhook = (request: Request, response: Response) => pipelines.run(request, response)
