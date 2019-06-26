@@ -3,6 +3,9 @@ import * as functions from "firebase-functions";
 import { IWebhookRule } from "./IWebhookRule";
 
 export class EmptyRule implements IWebhookRule {
+    name(): string {
+        return "EmptyRule";
+    }
 
     pass(req: functions.Request, res: functions.Response): boolean {
         return true;

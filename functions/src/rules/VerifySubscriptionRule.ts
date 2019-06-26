@@ -4,6 +4,10 @@ import { RuleConstants } from "./RuleConstants";
 import { IWebhookRule } from "./IWebhookRule";
 
 export class VerifySubscriptionRule implements IWebhookRule {
+    name(): string {
+        return "VerifySubscriptionRule";
+    }
+    
     public pass(req: functions.Request, res: functions.Response): boolean {
         return (req.query['hub.mode'] === 'subscribe');
     }

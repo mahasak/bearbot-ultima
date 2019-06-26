@@ -3,7 +3,10 @@ import * as functions from "firebase-functions";
 import { IWebhookRule } from "./IWebhookRule";
 
 export class DefaultRule implements IWebhookRule {
-
+    name(): string {
+        return "DefaultRule";
+    }
+    
     pass(req: functions.Request, res: functions.Response): boolean {
         return true;
     }

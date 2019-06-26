@@ -5,13 +5,29 @@ import { EmptyRule } from "../rules/EmptyRule";
 export class WebhookPipeline implements Iterator<IWebhookRule> {
     private pointer = 0;
 
-    constructor(public rules: IWebhookRule[]) { }
+    public run(request: Request, response: Response): IWebhookRule {
+        let executedRule: IWebhookRule = EmptyRule.getInstance();
+        let executed = false;
+
+        this.pipeline.forEach(rule => {
+            if(!executed && rule.pass(request, response)){
+                executedRule = rule;
+                rule.execute(request, response);
+                executed = true;
+                
+            }
+        });
+
+        return executedRule;
+    }
+
+    constructor(public pipeline: IWebhookRule[]) { }
 
     public next(): IteratorResult<IWebhookRule> {
-        if (this.pointer < this.rules.length) {
+        if (this.pointer < this.pipeline.length) {
             return {
                 done: false,
-                value: this.rules[this.pointer++]
+                value: this.pipeline[this.pointer++]
             }
         } else {
             return {
@@ -25,7 +41,7 @@ export class WebhookPipeline implements Iterator<IWebhookRule> {
         return this;
     }
 
-    public run(request: Request, response: Response) {
+    public execute(request: Request, response: Response) {
         let rule = this.next();
 
         while (true) {
