@@ -1,7 +1,7 @@
 var httpMocks       = require('node-mocks-http');
 
 import { WebhookPipeline } from "../components/WebhookPipeline";
-import { MockWebhookRule } from "../mocks/rules/MockRule1";
+import { MockWebhookRule } from "../mocks/rules/MockWebhookRule";
 import { EmptyRule } from "../rules";
 
 test("Should execute first rule", () => {
