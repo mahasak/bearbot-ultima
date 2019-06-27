@@ -25,6 +25,7 @@ export class verifyRequestRule implements IWebhookRule {
             console.log("request's signature is not valid");
             throw new Error("request's signature is not valid");
         }
+        console.log("request verification success");
     }
 
     static getInstance(): IWebhookRule {
