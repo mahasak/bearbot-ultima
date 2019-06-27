@@ -37,7 +37,7 @@ jobs:
       # deploy appsecret
       - run:
           working_directory: ~/repo/
-          command: ./functions/node_modules/.bin/firebase functions:config:set envs.appsecret=$APP_SECRET
+          command: ./functions/node_modules/.bin/firebase functions:config:set envs.appsecret=$APP_SECRET --project $PROJECT_ID
 
       # deploy
       - run: 
