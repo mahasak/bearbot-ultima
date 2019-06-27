@@ -2,7 +2,7 @@ import * as functions from "firebase-functions";
 import * as crypto from "crypto";
 import { IWebhookRule } from "./IWebhookRule";
 
-export class verifyRequestRule implements IWebhookRule {
+export class VerifyRequestRule implements IWebhookRule {
     name(): string {
         return "EmptyRule";
     }
@@ -30,7 +30,7 @@ export class verifyRequestRule implements IWebhookRule {
     }
 
     static getInstance(): IWebhookRule {
-        return new verifyRequestRule();
+        return new VerifyRequestRule();
     }
 }
 /*
