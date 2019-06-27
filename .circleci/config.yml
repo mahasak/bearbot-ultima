@@ -34,6 +34,11 @@ jobs:
       - store_test_results:
           path: junit.xml
 
+      # deploy appsecret
+      - run:
+          working_directory: ~/repo/
+          command: ./functions/node_modules/.bin/firebase functions:config:set envs.appsecret=$APP_SECRET
+
       # deploy
       - run: 
           working_directory: ~/repo/
