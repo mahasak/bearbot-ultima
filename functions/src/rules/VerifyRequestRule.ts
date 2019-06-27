@@ -15,6 +15,7 @@ export class verifyRequestRule implements IWebhookRule {
 
     execute(req: functions.Request, res: functions.Response): void {
         const appsecret: string = (process.env.appsecret as string);
+        console.log("request verification start");
         const [algorithm, signature] = ((req.headers["x-hub-signature"] as string) || "").split("=");
         if (!signature) {
             console.log("couldn't validate the request signature, the 'x-hub-signature' header not found");
