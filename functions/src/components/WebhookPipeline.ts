@@ -11,9 +11,12 @@ export class WebhookPipeline implements Iterator<IWebhookRule> {
 
         this.pipeline.forEach(rule => {
             if(!executed && rule.pass(request, response)){
-                executedRule = rule;
+                if (rule.terminator()) {
+                    executedRule = rule;
+                    executed = true;
+                }
                 rule.execute(request, response);
-                executed = true;
+                
                 
             }
         });

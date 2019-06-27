@@ -6,6 +6,8 @@ export class DefaultRule implements IWebhookRule {
     name(): string {
         return "DefaultRule";
     }
+
+    public terminator(): boolean { return true; }
     
     pass(req: functions.Request, res: functions.Response): boolean {
         return true;

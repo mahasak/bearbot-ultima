@@ -7,9 +7,13 @@ export class VerifySubscriptionRule implements IWebhookRule {
     name(): string {
         return "VerifySubscriptionRule";
     }
+
+    public terminator(): boolean {
+        return true;
+    }
     
     public pass(req: functions.Request, res: functions.Response): boolean {
-        return (req.query['hub.mode'] === 'subscribe');
+        return (req.method === 'GET' && req.query['hub.mode'] === 'subscribe');
     }
 
     public execute(req: functions.Request, res: functions.Response): void {

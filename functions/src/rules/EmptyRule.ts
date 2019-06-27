@@ -7,6 +7,8 @@ export class EmptyRule implements IWebhookRule {
         return "EmptyRule";
     }
 
+    public terminator(): boolean { return true; }
+
     pass(req: functions.Request, res: functions.Response): boolean {
         return true;
     }
