@@ -1,4 +1,4 @@
-var httpMocks       = require('node-mocks-http');
+const httpMocks       = require('node-mocks-http');
 
 import { WebhookPipeline } from "../components/WebhookPipeline";
 import { MockWebhookRule } from "../mocks/rules/MockWebhookRule";
@@ -6,18 +6,18 @@ import { EmptyRule } from "../rules";
 
 test("Should execute first rule", () => {
 
-    let rule1 = new MockWebhookRule("Rule #1", true ,true);
-    let rule2 = new MockWebhookRule("Rule #2", true, true);
-    let pipeline = new WebhookPipeline([rule1, rule2]);
+    const rule1 = new MockWebhookRule("Rule #1", true ,true);
+    const rule2 = new MockWebhookRule("Rule #2", true, true);
+    const pipeline = new WebhookPipeline([rule1, rule2]);
 
-    var request = httpMocks.createRequest({
+    const request = httpMocks.createRequest({
         method: 'GET',
         url: `/users/123`,
         params: {
             uid: '123'
         }
     });
-    var response = httpMocks.createResponse();
+    const response = httpMocks.createResponse();
 
 
     const result = pipeline.run(request, response);
@@ -26,20 +26,20 @@ test("Should execute first rule", () => {
 
 test("Should execute second rule", () => {
 
-    let rule1 = new MockWebhookRule("Rule #1", false, true );
-    let rule2 = new MockWebhookRule("Rule #2", true, true);
-    let rule3 = new MockWebhookRule("Rule #3", true, true);
+    const rule1 = new MockWebhookRule("Rule #1", false, true );
+    const rule2 = new MockWebhookRule("Rule #2", true, true);
+    const rule3 = new MockWebhookRule("Rule #3", true, true);
 
-    let pipeline = new WebhookPipeline([rule1, rule2, rule3]);
+    const pipeline = new WebhookPipeline([rule1, rule2, rule3]);
 
-    var request = httpMocks.createRequest({
+    const request = httpMocks.createRequest({
         method: 'GET',
         url: `/users/123`,
         params: {
             uid: '123'
         }
     });
-    var response = httpMocks.createResponse();
+    const response = httpMocks.createResponse();
 
 
     const result = pipeline.run(request, response);
@@ -48,20 +48,20 @@ test("Should execute second rule", () => {
 
 test("Should execute third rule", () => {
 
-    let rule1 = new MockWebhookRule("Rule #1", false, true );
-    let rule2 = new MockWebhookRule("Rule #2", false, true);
-    let rule3 = new MockWebhookRule("Rule #3", true, true);
+    const rule1 = new MockWebhookRule("Rule #1", false, true );
+    const rule2 = new MockWebhookRule("Rule #2", false, true);
+    const rule3 = new MockWebhookRule("Rule #3", true, true);
 
-    let pipeline = new WebhookPipeline([rule1, rule2, rule3]);
+    const pipeline = new WebhookPipeline([rule1, rule2, rule3]);
 
-    var request = httpMocks.createRequest({
+    const request = httpMocks.createRequest({
         method: 'GET',
         url: `/users/123`,
         params: {
             uid: '123'
         }
     });
-    var response = httpMocks.createResponse();
+    const response = httpMocks.createResponse();
 
 
     const result = pipeline.run(request, response);
@@ -70,21 +70,21 @@ test("Should execute third rule", () => {
 
 test("Should execute empty rule", () => {
 
-    let rule1 = new MockWebhookRule("Rule #1", false, true);
-    let rule2 = new MockWebhookRule("Rule #2", false, true);
-    let rule3 = new MockWebhookRule("Rule #3", false, true);
-    let emptyRule = new EmptyRule();
+    const rule1 = new MockWebhookRule("Rule #1", false, true);
+    const rule2 = new MockWebhookRule("Rule #2", false, true);
+    const rule3 = new MockWebhookRule("Rule #3", false, true);
+    const emptyRule = new EmptyRule();
 
-    let pipeline = new WebhookPipeline([rule1, rule2, rule3]);
+    const pipeline = new WebhookPipeline([rule1, rule2, rule3]);
 
-    var request = httpMocks.createRequest({
+    const request = httpMocks.createRequest({
         method: 'GET',
         url: `/users/123`,
         params: {
             uid: '123'
         }
     });
-    var response = httpMocks.createResponse();
+    const response = httpMocks.createResponse();
 
 
     const result = pipeline.run(request, response);
@@ -93,20 +93,20 @@ test("Should execute empty rule", () => {
 
 test("Should terminate at rule 2", () => {
 
-    let rule1 = new MockWebhookRule("Rule #1", true, false);
-    let rule2 = new MockWebhookRule("Rule #2", true, true);
-    let rule3 = new MockWebhookRule("Rule #3", true, true);
+    const rule1 = new MockWebhookRule("Rule #1", true, false);
+    const rule2 = new MockWebhookRule("Rule #2", true, true);
+    const rule3 = new MockWebhookRule("Rule #3", true, true);
 
-    let pipeline = new WebhookPipeline([rule1, rule2, rule3]);
+    const pipeline = new WebhookPipeline([rule1, rule2, rule3]);
 
-    var request = httpMocks.createRequest({
+    const request = httpMocks.createRequest({
         method: 'GET',
         url: `/users/123`,
         params: {
             uid: '123'
         }
     });
-    var response = httpMocks.createResponse();
+    const response = httpMocks.createResponse();
 
 
     const result = pipeline.run(request, response);

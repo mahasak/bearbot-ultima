@@ -16,8 +16,6 @@ export class WebhookPipeline implements Iterator<IWebhookRule> {
                     executed = true;
                 }
                 rule.execute(request, response);
-                
-                
             }
         });
 
