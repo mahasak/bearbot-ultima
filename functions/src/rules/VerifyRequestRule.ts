@@ -21,12 +21,12 @@ export class VerifyRequestRule implements IWebhookRule {
         const [algorithm, signature] = ((req.headers["X-Hub-Signature"] as string) || "").split("=");
         if (!signature) {
             console.log("couldn't validate the request signature, the 'x-hub-signature' header not found");
-            throw new Error("couldn't validate the request signature, the 'x-hub-signature' header not found");
+            //throw new Error("couldn't validate the request signature, the 'x-hub-signature' header not found");
         }
         const buf = req.body;
         if (signature !== crypto.createHmac(algorithm, appsecret).update(String(buf),"utf8").digest("hex")) {
             console.log("request's signature is not valid");
-            throw new Error("request's signature is not valid");
+            //throw new Error("request's signature is not valid");
         }
         console.log("request verification success");
     }
