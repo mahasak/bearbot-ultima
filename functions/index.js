@@ -83,7 +83,7 @@ const handleMessage = (sender_psid, received_message) => {
     }
 
     // Send the response message
-    callSendAPI(sender_psid, response);
+    SendMessage(sender_psid, response);
 }
 
 const handlePostback = (sender_psid, received_postback) => {
@@ -99,10 +99,10 @@ const handlePostback = (sender_psid, received_postback) => {
         response = { "text": "Oops, try sending another image." }
     }
     // Send the message to acknowledge the postback
-    callSendAPI(sender_psid, response);
+    SendMessage(sender_psid, response);
 }
 
-const callSendAPI = (psid, response) => {
+const SendMessage = (psid, response) => {
     let request_body = {
         recipient: {
             id: `${psid}`
@@ -110,34 +110,10 @@ const callSendAPI = (psid, response) => {
         message: response
     }
 
-    console.log(request_body);
-     
-    request({
-        uri: 'https://graph.facebook.com/v3.3/me/messages',
-        qs: { access_token: functions.config().messenger_api.token },
-        method: "POST",
-        json: request_body
-    }, (error, response, body) => {
-        if (!error && response.statusCode == 200) {
-            var recipientId = body.recipient_id;
-            var messageId = body.message_id
-
-            if (messageId) {
-                console.log("Successfully sent message with id %s to recipient %s",
-                    messageId, recipientId)
-            } else {
-                console.log("Successfully called Send API for recipient %s",
-                    recipientId)
-            }
-        } else {
-            console.error("Failed calling Send API", response.statusCode, response.statusMessage, body.error)
-        }
-    })
+    CallMessengerAPI(request_body)
 }
 
 const SendAction = (psid, action) => {
-    console.log("Sending a read receipt to mark message as seen");
-
     let request_body = {
         recipient: {
             id: psid
@@ -145,8 +121,10 @@ const SendAction = (psid, action) => {
         sender_action: action
     }
 
-    console.log(request_body);
-     
+    CallMessengerAPI(request_body)
+}
+
+const CallMessengerAPI = (request_body) => {
     request({
         uri: 'https://graph.facebook.com/v3.3/me/messages',
         qs: { access_token: functions.config().messenger_api.token },
@@ -169,117 +147,3 @@ const SendAction = (psid, action) => {
         }
     })
 }
-
-
-const verifySubscription = (req, res) => {
-    if (req.query['hub.mode'] === 'subscribe' &&
-        req.query['hub.verify_token'] === VERIFY_TOKEN) {
-        console.log("Validating webhook")
-        res.status(200).send(req.query['hub.challenge'])
-    } else {
-        console.error("Failed validation. Make sure the validation tokens match.")
-        res.sendStatus(403)
-    }
-}
-
-const processMessage = (req, res) => {
-    const data = req.body;
-
-    if (data.object == 'page') {
-        data.entry.forEach(pageEntry => {
-            const pageID = pageEntry.id
-            const timeOfEvent = pageEntry.time
-
-            pageEntry.messaging.forEach(function (event) {
-                if (event.message) {
-                    receivedMessage(event)
-                } else if (event.delivery) {
-                    receivedDeliveryConfirmation(event)
-                } else if (event.postback) {
-                    receivedPostback(event)
-                } else if (event.read) {
-                    receivedMessageRead(event)
-                } else if (event.account_linking) {
-                    receivedAccountLink(event)
-                } else {
-                    console.log(`Webhook received unknown messagingEvent: ${event}`)
-                }
-            });
-        });
-    }
-}
-
-const receivedMessage = (event) => {
-    const pageScopeID = event.sender.id
-    const recipientID = event.recipient.id
-    const message = event.message
-    const isEcho = message.is_echo
-    const messageId = message.mid
-    const appId = message.app_id
-    const metadata = message.metadata
-    const messageText = message.text
-    const messageAttachments = message.attachments
-    const quickReply = message.quick_reply
-
-    if (isEcho) {
-        console.log(`Received echo for message ${messageId} and app ${appId} with metadata ${metadata}`)
-        return
-    } else if (quickReply) {
-        const quickReplyPayload = quickReply.payload
-        console.log(`Quick reply for message ${messageId} with payload ${quickReplyPayload}`)
-
-        sendTextMessage(senderID, "Quick reply tapped")
-        return
-    } else {
-        sendTextMessage(pageScopeID, message.text)
-    }
-
-    console.log(`Received message from ${pageScopeID} and page ${recipientID} with mesage ${message.text}`)
-    markSeen(pageScopeID)
-
-}
-
-const receivedDeliveryConfirmation = (event) => {
-    const senderID = event.sender.id
-    const recipientID = event.recipient.id
-    const delivery = event.delivery
-    const messageIDs = delivery.mids
-    const watermark = delivery.watermark
-    const sequenceNumber = delivery.seq
-
-    if (messageIDs) {
-        messageIDs.forEach((messageID) => {
-            console.log(`Received delivery confirmation for message ID: ${messageID}`)
-        })
-    }
-
-    console.log(`All message before ${watermark} were delivered.`)
-}
-
-const receivedMessageRead = (event) => {
-    const senderID = event.sender.id
-    const recipientID = event.recipient.id
-
-    // All messages before watermark (a timestamp) or sequence have been seen.
-    const watermark = event.read.watermark
-    const sequenceNumber = event.read.seq
-
-    console.log(`Received message read event for watermark ${watermark} and sequence number ${sequenceNumber}`)
-}
-
-const sendTextMessage = (recipientId, messageText) => {
-    var messageData = {
-        recipient: {
-            id: recipientId
-        },
-        message: {
-            text: messageText,
-            metadata: "DEVELOPER_DEFINED_METADATA"
-        }
-    }
-
-    callSendAPI(messageData)
-}
-
-
-
