@@ -17,7 +17,7 @@
       },
       {
         "source": "/webhook/messenger",
-        "function": "webhookMessenger"
+        "function": "webhook"
       }
     ],
     "ignore": [
