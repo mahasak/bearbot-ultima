@@ -98,25 +98,25 @@ const handlePostback = (sender_psid, received_postback) => {
     } else if (payload === 'no') {
         response = { "text": "Oops, try sending another image." }
     }
-    // Send the message to acknowledge the postback
-    callSendAPI(sender_psid, response);
-}
-
-const callSendAPI = (psid, response) => {
-    let request_body = {
+    let message_body = {
         recipient: {
             id: `${psid}`
         },
         message: response
     }
 
-    console.log(request_body);
+    // Send the message to acknowledge the postback
+    callSendAPI(sender_psid, message_body);
+}
+
+const callSendAPI = (message_body) => {
+    console.log(message_body);
      
     request({
         uri: 'https://graph.facebook.com/v3.3/me/messages',
         qs: { access_token: functions.config().messenger_api.token },
         method: "POST",
-        json: request_body
+        json: message_body
     }, (error, response, body) => {
         if (!error && response.statusCode == 200) {
             var recipientId = body.recipient_id;
@@ -138,14 +138,13 @@ const callSendAPI = (psid, response) => {
 const SendAction = (psid, action) => {
     console.log("Sending a read receipt to mark message as seen");
 
-    var messageData = {
+    var message_body = {
         recipient: {
             id: psid
         },
         sender_action: action
     }
-
-    callSendAPI(messageData)
+    callSendAPI(psid, message_body)
 }
 
 
