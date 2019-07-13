@@ -43,7 +43,7 @@ exports.webhook = functions.https.onRequest((req, res) => {
 
 const handleMessage = (sender_psid, received_message) => {
     let response;
-
+    SendAction(sender_psid, 'mark_seen');
     // Checks if the message contains text
     if (received_message.text) {
         // Create the payload for a basic text message, which
@@ -130,6 +130,19 @@ const callSendAPI = (psid, response) => {
             console.error("Failed calling Send API", response.statusCode, response.statusMessage, body.error)
         }
     })
+}
+
+const SendAction = (psid, action) => {
+    console.log("Sending a read receipt to mark message as seen");
+
+    var messageData = {
+        recipient: {
+            id: psid
+        },
+        sender_action: action
+    }
+
+    callSendAPI(messageData)
 }
 
 
@@ -247,15 +260,3 @@ const sendTextMessage = (recipientId, messageText) => {
 
 
 
-const markSeen = (psid) => {
-    console.log("Sending a read receipt to mark message as seen");
-
-    var messageData = {
-        recipient: {
-            id: psid
-        },
-        sender_action: "mark_seen"
-    }
-
-    callSendAPI(messageData)
-}
