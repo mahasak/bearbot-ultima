@@ -44,6 +44,7 @@ exports.webhook = functions.https.onRequest((req, res) => {
 const handleMessage = (sender_psid, received_message) => {
     let response;
     SendAction(sender_psid, 'mark_seen');
+    SendAction(sender_psid, 'type_on');
     // Checks if the message contains text
     if (received_message.text) {
         // Create the payload for a basic text message, which
