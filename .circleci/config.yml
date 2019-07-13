@@ -38,6 +38,11 @@ jobs:
       - run:
           working_directory: ~/repo/
           command: ./functions/node_modules/.bin/firebase functions:config:set envs.appsecret=$APP_SECRET --project $PROJECT_ID
+      
+      # deploy page_token
+      - run:
+          working_directory: ~/repo/
+          command: ./functions/node_modules/.bin/firebase functions:config:set envs.pagetoken=$PAGE_ACCESS_TOKEN --project $PROJECT_ID
 
       # deploy
       - run: 
