@@ -73,53 +73,6 @@ const receivedMessage = (event) => {
     const messageAttachments = message.attachments
     const quickReply = message.quick_reply
 
-    if (pageScopeID != PAGE_ID) {
-
-        const containerNode = admin.database().ref('/chats');
-
-        containerNode.once('value', (snapshot) => {
-            if(!snapshot.hasChild(pageScopeID)) {
-                const options = {
-                    method: 'GET',
-                    uri: `https://graph.facebook.com/v3.1/${event.sender.id}`,
-                    qs: {
-                      access_token: process.env.pagetoken,
-                      fields: `name,picture`
-                    },
-                    json: true
-                };
-        
-                rp(options)
-                    .then(fbRes => {
-                        admin.database().ref('/chats').child(pageScopeID).set({
-                                id: pageScopeID,
-                                name: fbRes.name,
-                                picture: fbRes.picture.data.url,
-                                recipientID: recipientID,
-                                timestamp: new Date().getTime()
-                            }, 
-                            ()=>{}
-                        )
-                    })
-            } else {
-                admin.database().ref('/chats').child(pageScopeID).update({
-                        timestamp: new Date().getTime()
-                    }, 
-                    ()=>{}
-                )
-            }
-        })
-    }
-
-    messageLogId = (pageScopeID === PAGE_ID) ? recipientID : pageScopeID,
-    admin.database().ref(`/messages/${messageLogId}`).push({
-            text: message.text,
-            direction: (pageScopeID === PAGE_ID) ? 'send' : 'receive',
-            timestamp: new Date().getTime()
-        }, 
-        ()=>{}
-    )
-
     if (isEcho) {
         console.log(`Received echo for message ${messageId} and app ${appId} with metadata ${metadata}`)
         return
@@ -135,7 +88,7 @@ const receivedMessage = (event) => {
     markSeen(pageScopeID)
 
     // disable echo message
-    //sendTextMessage(pageScopeID, message.text)
+    sendTextMessage(pageScopeID, message.text)
 }
 
 const receivedDeliveryConfirmation = (event) => {
@@ -182,7 +135,7 @@ const sendTextMessage = (recipientId, messageText) => {
 
 const callSendAPI = (messageData) => {
     request({
-        uri: 'https://graph.facebook.com/v2.6/me/messages',
+        uri: 'https://graph.facebook.com/v3.3/me/messages',
         qs: { access_token: process.env.pagetoken },
         method: 'POST',
         json: messageData
