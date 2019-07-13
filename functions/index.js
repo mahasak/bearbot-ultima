@@ -6,7 +6,7 @@ const VERIFY_TOKEN = 'BEARBOT_VERIFIER';
 const PAGE_ID = 2199911393591385;
 admin.initializeApp(functions.config().firebase)
 
-exports.helloWorld = functions.https.onRequest((request, response) => {
+exports.version = functions.https.onRequest((request, response) => {
     response.send("Bearbot API - V.1.0.0")
 })
 
