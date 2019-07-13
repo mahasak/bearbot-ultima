@@ -82,13 +82,15 @@ const receivedMessage = (event) => {
 
         sendTextMessage(senderID, "Quick reply tapped")
         return
+    } else {
+        sendTextMessage(pageScopeID, message.text)
     }
 
     console.log(`Received message from ${pageScopeID} and page ${recipientID} with mesage ${message.text}`)
     markSeen(pageScopeID)
 
     // disable echo message
-    sendTextMessage(pageScopeID, message.text)
+    
 }
 
 const receivedDeliveryConfirmation = (event) => {
