@@ -108,10 +108,10 @@ const callSendAPI = (psid, response) => {
         },
         message: response
     }
-    console.log({token: process.env})
+    console.log({token: functions.config().messenger_api.token})
     request({
         uri: 'https://graph.facebook.com/v3.3/me/messages',
-        qs: { access_token: process.env.pagetoken },
+        qs: { access_token: functions.config().messenger_api.token },
         method: "POST",
         json: request_body
     }, (error, response, body) => {

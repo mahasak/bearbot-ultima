@@ -37,14 +37,8 @@ jobs:
       # deploy appsecret
       - run:
           working_directory: ~/repo/
-          command: ./functions/node_modules/.bin/firebase functions:config:set envs.appsecret=$APP_SECRET --project $PROJECT_ID
-      
-       # deploy appsecret
-      - run:
-          working_directory: ~/repo/
-          command: ./functions/node_modules/.bin/firebase functions:config:set envs.pagetoken=$PAGE_ACCESS_TOKEN --project $PROJECT_ID
+          command: ./functions/node_modules/.bin/firebase functions:config:set messenger_api.secret=$APP_SECRET messenger_api.token=$PAGE_ACCESS_TOKEN --project $PROJECT_ID
 
-          
       # deploy
       - run: 
           working_directory: ~/repo/
