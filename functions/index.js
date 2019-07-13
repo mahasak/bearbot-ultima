@@ -105,11 +105,13 @@ const handlePostback = (sender_psid, received_postback) => {
 const callSendAPI = (psid, response) => {
     let request_body = {
         recipient: {
-            id: psid
+            id: `${psid}`
         },
         message: response
     }
-    console.log({token: functions.config().messenger_api.token})
+
+    console.log(request_body);
+     
     request({
         uri: 'https://graph.facebook.com/v3.3/me/messages',
         qs: { access_token: functions.config().messenger_api.token },
@@ -212,8 +214,6 @@ const receivedMessage = (event) => {
 
     console.log(`Received message from ${pageScopeID} and page ${recipientID} with mesage ${message.text}`)
     markSeen(pageScopeID)
-
-    // disable echo message
 
 }
 
