@@ -98,25 +98,25 @@ const handlePostback = (sender_psid, received_postback) => {
     } else if (payload === 'no') {
         response = { "text": "Oops, try sending another image." }
     }
-    let message_body = {
+    // Send the message to acknowledge the postback
+    callSendAPI(sender_psid, response);
+}
+
+const callSendAPI = (psid, response) => {
+    let request_body = {
         recipient: {
             id: `${psid}`
         },
         message: response
     }
 
-    // Send the message to acknowledge the postback
-    callSendAPI(sender_psid, message_body);
-}
-
-const callSendAPI = (message_body) => {
-    console.log(message_body);
+    console.log(request_body);
      
     request({
         uri: 'https://graph.facebook.com/v3.3/me/messages',
         qs: { access_token: functions.config().messenger_api.token },
         method: "POST",
-        json: message_body
+        json: request_body
     }, (error, response, body) => {
         if (!error && response.statusCode == 200) {
             var recipientId = body.recipient_id;
@@ -138,13 +138,36 @@ const callSendAPI = (message_body) => {
 const SendAction = (psid, action) => {
     console.log("Sending a read receipt to mark message as seen");
 
-    var message_body = {
+    let request_body = {
         recipient: {
             id: psid
         },
         sender_action: action
     }
-    callSendAPI(psid, message_body)
+
+    console.log(request_body);
+     
+    request({
+        uri: 'https://graph.facebook.com/v3.3/me/messages',
+        qs: { access_token: functions.config().messenger_api.token },
+        method: "POST",
+        json: request_body
+    }, (error, response, body) => {
+        if (!error && response.statusCode == 200) {
+            var recipientId = body.recipient_id;
+            var messageId = body.message_id
+
+            if (messageId) {
+                console.log("Successfully sent message with id %s to recipient %s",
+                    messageId, recipientId)
+            } else {
+                console.log("Successfully called Send API for recipient %s",
+                    recipientId)
+            }
+        } else {
+            console.error("Failed calling Send API", response.statusCode, response.statusMessage, body.error)
+        }
+    })
 }
 
 
