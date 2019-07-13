@@ -7,7 +7,7 @@ const PAGE_ID = 2199911393591385;
 admin.initializeApp(functions.config().firebase)
 
 exports.version = functions.https.onRequest((request, response) => {
-    response.send("Bearbot API - V.1.0.0")
+    response.send("Bearbot API - V.2.0.0")
 })
 
 exports.webhook = functions.https.onRequest((req, res) => {
