@@ -2,6 +2,8 @@ const request = require('request')
 const rp = require('request-promise')
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
+
+import sendApi from './lib/send'
 const VERIFY_TOKEN = 'BEARBOT_VERIFIER';
 const PAGE_ID = 2199911393591385;
 admin.initializeApp(functions.config().firebase)
@@ -43,8 +45,6 @@ exports.webhook = functions.https.onRequest((req, res) => {
 
 const handleMessage = (sender_psid, received_message) => {
     let response;
-    SendAction(sender_psid, 'mark_seen');
-    SendAction(sender_psid, 'type_on');
     // Checks if the message contains text
     if (received_message.text) {
         // Create the payload for a basic text message, which
@@ -83,7 +83,7 @@ const handleMessage = (sender_psid, received_message) => {
     }
 
     // Send the response message
-    SendMessage(sender_psid, response);
+    sendApi.sendMessage(sender_psid, response)
 }
 
 const handlePostback = (sender_psid, received_postback) => {
@@ -99,7 +99,7 @@ const handlePostback = (sender_psid, received_postback) => {
         response = { "text": "Oops, try sending another image." }
     }
     // Send the message to acknowledge the postback
-    SendMessage(sender_psid, response);
+    sendApi.sendMessage(sender_psid, response)
 }
 
 const SendMessage = (psid, response) => {
@@ -120,7 +120,11 @@ const SendAction = (psid, action) => {
         },
         sender_action: action
     }
-
+    api.callMessagesAPI([
+        typingOn(psid),
+        ...messagePayloadArray,
+        typingOff(psid),
+      ]);
     CallMessengerAPI(request_body)
 }
 
@@ -146,4 +150,28 @@ const CallMessengerAPI = (request_body) => {
             console.error("Failed calling Send API", response.statusCode, response.statusMessage, body.error)
         }
     })
+}
+
+const Getstart = (psid) => {
+    let request_body = {
+        "get_started": {
+            "payload": {
+                "persistent_menu": [
+                    {
+                        "locale": "default",
+                        "composer_input_disabled": false,
+                        "call_to_actions": [
+                            {
+                                "type": "postback",
+                                "title": "Calculate BMI",
+                                "payload": "LIVE_CALC_BMI"
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+
+    CallMessengerAPI(request_body)
 }
