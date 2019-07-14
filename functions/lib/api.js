@@ -1,7 +1,7 @@
-import castArray from 'lodash/castArray';
-import isEmpty from 'lodash/isEmpty';
-import request from 'request';
-import rp from 'request-promise';
+const castArray = require('lodash/castArray')
+const isEmpty = require('lodash/isEmpty')
+const request = require('request')
+const rp = require('request-promise')
 
 const PAGE_ACCESS_TOKEN = functions.config().messenger_api.token;
 

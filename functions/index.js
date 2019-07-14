@@ -3,8 +3,8 @@ const rp = require('request-promise')
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
 
-import sendApi from './lib/send'
-const VERIFY_TOKEN = 'BEARBOT_VERIFIER';
+const sendApi = require('./lib/send')
+const VERIFY_TOKEN = 'BEARBOT_VERIFIER'
 const PAGE_ID = 2199911393591385;
 admin.initializeApp(functions.config().firebase)
 

@@ -1,6 +1,6 @@
-import castArray from 'lodash/castArray';
+const castArray = require('lodash/castArray')
 
-import api from './api';
+const api = require('./api')
 //import messages from './messages';
 
 const typingOn = (recipientId) => {
