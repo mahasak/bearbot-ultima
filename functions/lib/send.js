@@ -52,7 +52,7 @@ const sendReadReceipt = (recipientId) => {
   api.callMessagesAPI(messageData);
 };
 
-export default {
+module.exports =  {
   sendMessage,
   sendReadReceipt
 };

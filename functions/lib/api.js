@@ -2,6 +2,7 @@ const castArray = require('lodash/castArray')
 const isEmpty = require('lodash/isEmpty')
 const request = require('request')
 const rp = require('request-promise')
+const functions = require('firebase-functions')
 
 const PAGE_ACCESS_TOKEN = functions.config().messenger_api.token;
 
@@ -66,7 +67,7 @@ const callMessengerProfileAPI = (messageDataArray, queryParams = {}) => {
     return callAPI('messenger_profile', messageDataArray, queryParams);
 };
 
-export default {
+module.exports =  {
     callMessagesAPI,
     callMessengerProfileAPI,
 };
